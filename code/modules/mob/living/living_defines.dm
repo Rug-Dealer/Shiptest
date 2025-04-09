@@ -104,6 +104,8 @@
 	var/num_hands = 2
 	///How many usable hands does this mob currently have. Should only be changed through set_usable_hands()
 	var/usable_hands = 2
+	///How many broken hands does this mob currently have. Should only be changed through set_usable_hands()
+	var/broken_hands = 0
 
 	var/list/pipes_shown = list()
 	var/last_played_vent

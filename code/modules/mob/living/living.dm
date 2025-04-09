@@ -1788,6 +1788,11 @@ GLOBAL_VAR_INIT(ssd_indicator_overlay, mutable_appearance('icons/mob/ssd_indicat
 	else if(!(movement_type & (FLYING | FLOATING)) && !usable_hands && !usable_legs) //Lost a hand, not flying, no hands left, no legs.
 		ADD_TRAIT(src, TRAIT_IMMOBILIZED, LACKING_LOCOMOTION_APPENDAGES_TRAIT)
 
+/mob/living/proc/set_broken_hands(new_value) //Used for adjusting do_after_coefficient
+	if(broken_hands == new_value)
+		return
+	. = broken_hands
+	broken_hands = new_value
 
 /// Changes the value of the [living/body_position] variable.
 /mob/living/proc/set_body_position(new_value, fall_sound_played)

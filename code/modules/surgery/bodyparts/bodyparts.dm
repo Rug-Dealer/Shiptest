@@ -258,9 +258,13 @@
 		if(ALIEN_BODYPART,LARVA_BODYPART) //aliens take double burn //nothing can burn with so much snowflake code around
 			burn *= 2
 
+	var/adjusted_break_threshold = bone_break_threshold
+	if(bone_status == BONE_FLAG_SPLINTED) //splints come apart rather violently under any sort of fighting
+		adjusted_break_threshold = bone_break_threshold / 2
+		break_modifier *= 2
 	// Bone breaking. The harder you get hit and the more hurt you already are - the more likely you are to break a bone.
 	// The more damaged your bodypart is, the easier it is to break a bone, down to at least 5 force at 90 existing damage.
-	if((brute >= (bone_break_threshold - clamp((brute_dam * 0.5), 0, 45))) && prob(break_modifier + brute_dam * 0.5))
+	if((brute >= (adjusted_break_threshold - clamp((brute_dam * 0.5), 0, 45))) && prob(break_modifier + brute_dam * 0.5))
 		break_bone()
 
 	// Bleeding is applied here
@@ -820,6 +824,9 @@
 		return
 	if (bone_status == BONE_FLAG_NORMAL && body_part & LEGS) // Because arms are not legs
 		owner.set_broken_legs(owner.broken_legs + 1)
+	if (bone_status == BONE_FLAG_NORMAL && body_part & ARMS) // Because legs are not arms
+		owner.set_broken_hands(owner.broken_hands + 1)
+
 	bone_status = BONE_FLAG_BROKEN
 //	addtimer(CALLBACK(src, PROC_REF(break_bone_feedback), 1 SECONDS)) testing sommething
 
@@ -831,14 +838,16 @@
 	// owner.update_inv_splints() breaks
 	if (bone_status != BONE_FLAG_NORMAL && body_part & LEGS)
 		owner.set_broken_legs(owner.broken_legs - 1)
+	if (bone_status != BONE_FLAG_NORMAL && body_part & ARMS)
+		owner.set_broken_hands(owner.broken_hands - 1)
 	bone_status = BONE_FLAG_NORMAL
 
 /obj/item/bodypart/proc/on_mob_move()
-	// Dont trigger if it isn't broken or if it has no owner or is buckled to a rollerbed
-	if(bone_status != BONE_FLAG_BROKEN || !owner || istype(owner?.buckled, /obj/structure/bed/roller))
+	// Dont trigger if it is normal/no bones or if it has no owner or is buckled to a rollerbed
+	if(bone_status <= 1 || !owner || istype(owner?.buckled, /obj/structure/bed/roller))
 		return
 
-	if(prob(owner.m_intent == MOVE_INTENT_RUN ? 5 : 1))
+	if((bone_status == BONE_FLAG_BROKEN) && prob(owner.m_intent == MOVE_INTENT_RUN ? 5 : 1))
 		if(HAS_TRAIT(owner, TRAIT_ANALGESIA))
 			to_chat(owner, span_notice("[pick("You feel something shifting inside your [name].", "There is something moving inside [name].", "Something inside your [name] slips.")]"))
 		else
