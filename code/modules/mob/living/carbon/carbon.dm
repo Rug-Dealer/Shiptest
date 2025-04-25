@@ -970,7 +970,7 @@
 			if(SANITY_NEUTRAL to INFINITY)
 				. *= 0.90
 	if(broken_hands > 0)
-		. *= ((broken_hands / 4) + 1) //.25 penalty per broken or splinted hand
+		. *= ((broken_hands / 4) + 1) //25% penalty per broken or splinted hand
 
 /mob/living/carbon/proc/create_internal_organs()
 	for(var/X in internal_organs)

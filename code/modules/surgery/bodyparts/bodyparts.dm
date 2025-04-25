@@ -842,7 +842,7 @@
 
 /obj/item/bodypart/proc/on_mob_move()
 	// Dont trigger if it is normal/no bones or if it has no owner or is buckled to a rollerbed
-	if(bone_status <= 1 || !owner || istype(owner?.buckled, /obj/structure/bed/roller))
+	if(bone_status == BONE_FLAG_NORMAL || bone_status == BONE_FLAG_NO_BONES || !owner || istype(owner?.buckled, /obj/structure/bed/roller))
 		return
 
 	if((bone_status == BONE_FLAG_BROKEN) && prob(owner.m_intent == MOVE_INTENT_RUN ? 5 : 1))
