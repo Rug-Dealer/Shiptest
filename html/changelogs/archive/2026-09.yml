@@ -24,3 +24,10 @@
       (prev 12) The wielded slowdown has also been decreased by 0.1
   TheUSSWatercooler:
   - bugfix: inacusiate in oculine medipen
+2026-09-06:
+  Ical92:
+  - rscadd: Autowiki for all reagents
+  cluckinawesome, thearbiber:
+  - rscadd: Added the ESH hardsuit
+  zimon9:
+  - bugfix: fixes caseless ammunition causing runtimes
